@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../static/style.css">
+    <title>Reach/Unreach</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Reach/Unreach</h1>
+        </div>
+        <div class="content">
+            <h2>Choose my .csv file</h2>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="MAX_FILE_SIZE" value="4194304" />
+                <input type="file" name="file"/>
+                <button type="submit" name="button1">Upload</button>
+                <button type="submit" name="button2">Clear</button>
+            </form>
+        </div>
+        <div class="result">
+            <h2>Résultat</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <TH>Location</TH> 
+                        <th>IP</th>
+                        <th>Reach</th>
+                        <th>Unreach</th>
+                        <th>Response Time</th>
+                    </tr>
+                </thead>
+                <tbody id="result-table">
+                    {% if ping_results %}
+                        {% for result in ping_results %}
+                            <tr>
+                                <td>{{ result.server_name }}</td>
+                                <td>{{ result.ip_address }}</td>
+                                <td>{{ result.reach }}</td>
+                                <td>{{ result.unreach }}</td>
+                                <td>{{ result.response_time }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="5">Aucun résultat</td> <!-- Correction du colspan -->
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="footer">
+            <p>Created by <a href="https://github.com/Maurelk">MaurelK</a></p>
+        </div><div class="telechargement">
+            <form method="GET" action="{% url 'download_csv' %}">
+                <button type="submit">Télécharger le résultat en CSV</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
